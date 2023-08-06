@@ -117,12 +117,23 @@ class MicRecorderDelegate extends RecorderDelegate {
       audio: config.device == null
           ? true
           : {
-              'deviceId': {'exact': config.device!.id}
-            },
+        'deviceId': {'exact': config.device!.id}
+      },
     );
 
     final context = AudioContext();
     final microphone = await mediaDevices.getUserMedia(constraints);
+    if (config.sampleRate > microphone.getAudioTracks()[0].getCapabilities().sampleRate.max) {
+      config.sampleRate = microphone.getAudioTracks()[0].getCapabilities().sampleRate.max;
+    } else if (config.sampleRate < microphone.getAudioTracks()[0].getCapabilities().sampleRate.min) {
+      config.sampleRate = microphone.getAudioTracks()[0].getCapabilities().sampleRate.min;
+    }
+
+    if (config.numChannels > microphone.getAudioTracks()[0].getCapabilities().channelCount.max) {
+      config.numChannels = microphone.getAudioTracks()[0].getCapabilities().channelCount.max;
+    } else if (config.numChannels < microphone.getAudioTracks()[0].getCapabilities().channelCount.min) {
+      config.numChannels = microphone.getAudioTracks()[0].getCapabilities().channelCount.min;
+    }
 
     final source = context.createMediaStreamSource(microphone);
 
@@ -149,7 +160,7 @@ class MicRecorderDelegate extends RecorderDelegate {
     }
 
     recorder.port.onmessage = jsu.allowInterop(
-      (event) {
+          (event) {
         if (isStream) {
           _onMessageStream(event as MessageEvent);
         } else {
@@ -184,8 +195,9 @@ class MicRecorderDelegate extends RecorderDelegate {
 
     for (var i = 0; i < data.length; i++) {
       var sample32 = data[i].clamp(-1.0, 1.0);
-
-      output[i] = (sample32 * 0x7fff).toInt();
+      ByteData byteData = ByteData(2);
+      byteData.setInt16(0, (sample32 * 0x7fff).toInt());
+      output[i] = byteData.getInt16(0);
     }
 
     return output;

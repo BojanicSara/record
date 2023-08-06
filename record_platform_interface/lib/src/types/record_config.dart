@@ -23,15 +23,15 @@ import 'package:record_platform_interface/src/types/types.dart';
 /// `*`: May not be considered on all platforms/formats.
 class RecordConfig {
   final AudioEncoder encoder;
-  final int bitRate;
-  final int sampleRate;
-  final int numChannels;
+  int bitRate;
+  int sampleRate;
+  int numChannels;
   final InputDevice? device;
   final bool autoGain;
   final bool echoCancel;
   final bool noiseSuppress;
 
-  const RecordConfig({
+  RecordConfig({
     this.encoder = AudioEncoder.aacLc,
     this.bitRate = 128000,
     this.sampleRate = 44100,
