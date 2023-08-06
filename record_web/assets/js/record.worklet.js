@@ -37,9 +37,10 @@ class RecorderProcessor extends AudioWorkletProcessor {
   process(inputs) {
     const input = inputs[0]
 
-    input.forEach((channelData) => {
-      this.append(channelData)
-    })
+    this.append(input[0])
+//    input.forEach((channelData) => {
+//      this.append(channelData)
+//    })
 
     return true
   }
