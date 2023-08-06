@@ -4,14 +4,12 @@ import '../js/js_interop/core.dart';
 
 import 'encoder.dart';
 import 'dart:convert';
-import 'dart:math';
 
 // Assumes bit depth to int16
 class WavEncoder implements Encoder {
   final int sampleRate;
   final int numChannels;
   int _numSamples = 0;
-  // DataView(js) -> ByteData(dart)
   List<ByteData> _dataViews = [];
 
   WavEncoder({required this.sampleRate, required this.numChannels});

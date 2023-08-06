@@ -12,6 +12,8 @@ import 'package:record_web/js/js_interop/core.dart';
 import 'package:record_web/recorder/delegate/recorder_delegate.dart';
 import 'package:record_web/recorder/recorder.dart';
 
+import '../../encoder/mp3_encoder.dart';
+
 class MicRecorderDelegate extends RecorderDelegate {
   final OnStateChanged onStateChanged;
 
@@ -142,7 +144,7 @@ class MicRecorderDelegate extends RecorderDelegate {
       } else if (config.encoder == AudioEncoder.pcm16bits) {
         _encoder = PcmEncoder();
       } else if (config.encoder == AudioEncoder.mp3) {
-        _encoder = MP3Encoder(sampleRate: config.sampleRate, numChannels: config.numChannels, kbps: config.bitRate ~/ 1000);
+        _encoder = MP3Encoder(sampleRate: config.sampleRate, channels: config.numChannels, kbps: config.bitRate ~/ 1000);
       }
     }
 

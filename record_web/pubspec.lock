@@ -76,12 +76,11 @@ packages:
     source: hosted
     version: "2.1.4"
   record_platform_interface:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
-      name: record_platform_interface
-      sha256: c5034d04fb2066dedac6d6b4352a8943dda0190bb50432311c53ae9b6a1901b7
-      url: "https://pub.dev"
-    source: hosted
+      path: "../record_platform_interface"
+      relative: true
+    source: path
     version: "1.0.1"
   sky_engine:
     dependency: transitive
