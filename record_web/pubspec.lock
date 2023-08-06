@@ -76,11 +76,13 @@ packages:
     source: hosted
     version: "2.1.4"
   record_platform_interface:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
-      path: "../record_platform_interface"
-      relative: true
-    source: path
+      path: record_platform_interface
+      ref: HEAD
+      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      url: "https://github.com/BojanicSara/record.git"
+    source: git
     version: "1.0.1"
   sky_engine:
     dependency: transitive
