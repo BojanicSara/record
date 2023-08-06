@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
-import 'package:record_web/js/js_interop/core.dart';
+import '../js/js_interop/core.dart';
 
 import 'encoder.dart';
+import 'dart:convert';
+import 'dart:math';
 
 // Assumes bit depth to int16
 class WavEncoder implements Encoder {
@@ -26,18 +28,18 @@ class WavEncoder implements Encoder {
     final view = ByteData(44);
 
     view.setString(0, 'RIFF');
-    view.setUint32(4, 36 + dataSize);
+    view.setUint32(4, 36 + dataSize, Endian.little);
     view.setString(8, 'WAVE');
     view.setString(12, 'fmt ');
-    view.setUint32(16, 16);
-    view.setUint16(20, 1);
-    view.setUint16(22, numChannels);
-    view.setUint32(24, sampleRate);
-    view.setUint32(28, sampleRate * 4);
-    view.setUint16(32, numChannels * 2);
-    view.setUint16(34, 16);
+    view.setUint32(16, 16, Endian.little);
+    view.setUint16(20, 1, Endian.little);
+    view.setUint16(22, numChannels, Endian.little);
+    view.setUint32(24, sampleRate, Endian.little);
+    view.setUint32(28, sampleRate * numChannels * 2, Endian.little);
+    view.setUint16(32, numChannels * 2, Endian.little);
+    view.setUint16(34, 16, Endian.little);
     view.setString(36, 'data');
-    view.setUint32(40, dataSize);
+    view.setUint32(40, dataSize, Endian.little);
 
     _dataViews.insert(0, view);
 
@@ -48,10 +50,10 @@ class WavEncoder implements Encoder {
     return blob;
   }
 
-  void setString(view, offset, str) {
+  void setString(view, offset, String str) {
     var len = str.length;
     for (var i = 0; i < len; ++i) {
-      view.setUint8(offset + i, str.charCodeAt(i));
+      view.setUint8(offset + i, str[i]);
     }
   }
 
@@ -63,7 +65,7 @@ extension ByteDataExt on ByteData {
   void setString(offset, str) {
     var len = str.length;
     for (var i = 0; i < len; ++i) {
-      setUint8(offset + i, str.charCodeAt(i));
+      setUint8(offset + i, utf8.encode(str[i])[0]);
     }
   }
 }

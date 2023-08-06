@@ -57,6 +57,7 @@ class Recorder {
     switch (encoder) {
       case AudioEncoder.wav:
       case AudioEncoder.pcm16bits:
+      case AudioEncoder.mp3:
         return Future.value(true);
       default:
         final type = getSupportedMimeType(encoder);
@@ -124,6 +125,7 @@ class Recorder {
     switch (config.encoder) {
       case AudioEncoder.wav:
       case AudioEncoder.pcm16bits:
+      case AudioEncoder.mp3:
         await _delegate?.dispose();
         _delegate = MicRecorderDelegate(onStateChanged: _updateState);
         return _delegate!.start(config, path: path);
@@ -146,6 +148,7 @@ class Recorder {
     switch (config.encoder) {
       case AudioEncoder.wav:
       case AudioEncoder.pcm16bits:
+      case AudioEncoder.mp3:
         await _delegate?.dispose();
         _delegate = MicRecorderDelegate(onStateChanged: _updateState);
         return _delegate!.startStream(config);

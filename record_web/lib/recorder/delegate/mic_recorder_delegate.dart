@@ -141,6 +141,8 @@ class MicRecorderDelegate extends RecorderDelegate {
         );
       } else if (config.encoder == AudioEncoder.pcm16bits) {
         _encoder = PcmEncoder();
+      } else if (config.encoder == AudioEncoder.mp3) {
+        _encoder = MP3Encoder(sampleRate: config.sampleRate, numChannels: config.numChannels, kbps: config.bitRate ~/ 1000);
       }
     }
 

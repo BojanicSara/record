@@ -26,6 +26,8 @@ const mimeTypes = {
   ],
 
   AudioEncoder.pcm16bits: ['audio/pcm', 'audio/webm; codecs=pcm'],
+
+  AudioEncoder.mp3: ['audio/mp3'],
 };
 
 String? getSupportedMimeType(AudioEncoder encoder) {

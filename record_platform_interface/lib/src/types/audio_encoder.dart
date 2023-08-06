@@ -55,4 +55,10 @@ enum AudioEncoder {
   ///
   /// Suggested file extension: `pcm`
   pcm16bits,
+
+  /// MP3-audio
+  ///
+  /// Suggested file extension: `mp3`
+  /// Only supported on web
+  mp3
 }
