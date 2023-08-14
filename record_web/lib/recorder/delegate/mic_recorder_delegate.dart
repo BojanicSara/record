@@ -122,6 +122,8 @@ class MicRecorderDelegate extends RecorderDelegate {
     );
 
     final context = AudioContext();
+    print('sample rate ${microphone.getAudioTracks()[0].getCapabilities().sampleRate}');
+    print('channel count ${microphone.getAudioTracks()[0].getCapabilities().channelCount}');
     final microphone = await mediaDevices.getUserMedia(constraints);
     if (config.sampleRate > microphone.getAudioTracks()[0].getCapabilities().sampleRate.max) {
       config.sampleRate = microphone.getAudioTracks()[0].getCapabilities().sampleRate.max;
@@ -134,6 +136,7 @@ class MicRecorderDelegate extends RecorderDelegate {
     } else if (config.numChannels < microphone.getAudioTracks()[0].getCapabilities().channelCount.min) {
       config.numChannels = microphone.getAudioTracks()[0].getCapabilities().channelCount.min;
     }
+    print('#1');
 
     final source = context.createMediaStreamSource(microphone);
 
@@ -156,6 +159,7 @@ class MicRecorderDelegate extends RecorderDelegate {
         _encoder = PcmEncoder();
       } else if (config.encoder == AudioEncoder.mp3) {
         _encoder = MP3Encoder(sampleRate: config.sampleRate, channels: config.numChannels, kbps: config.bitRate ~/ 1000);
+        print('initialised encoder');
       }
     }
 
