@@ -223,6 +223,9 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   
   private func getRecordingInputDevice(config: RecordConfig) throws -> AVCaptureDeviceInput {
     guard let dev = getInputDevice(device: config.device) else {
+
+      configDevice = config.device
+      print("GET INPUT DEVICE, \(configDevice)!")
       throw RecorderError.error(message: "Failed to start recording", details: "Input device not found.")
     }
     

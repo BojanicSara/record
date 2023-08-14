@@ -102,7 +102,7 @@ class AudioNode {
 
 extension PropsAudioNode on AudioNode {
   AudioNode connect(AudioNode destinationNode,
-          [int? output = 0, int? input = 0]) =>
+      [int? output = 0, int? input = 0]) =>
       jsu.callMethod(this, 'connect', [destinationNode, output, input]);
 
   void disconnect([AudioNode? destinationNode, int? output, int? input]) =>
@@ -265,13 +265,13 @@ extension PropsAnalyserNode on AnalyserNode {
 class AudioNodeOptions {
   external factory AudioNodeOptions._(
       {int? channelCount,
-      String? channelCountMode,
-      String? channelInterpretation});
+        String? channelCountMode,
+        String? channelInterpretation});
 
   factory AudioNodeOptions(
-          {int? channelCount,
-          ChannelCountMode? channelCountMode,
-          ChannelInterpretation? channelInterpretation}) =>
+      {int? channelCount,
+        ChannelCountMode? channelCountMode,
+        ChannelInterpretation? channelInterpretation}) =>
       AudioNodeOptions._(
           channelCount: channelCount ?? undefined,
           channelCountMode: channelCountMode?.value ?? undefined,
@@ -304,15 +304,15 @@ extension PropsAudioNodeOptions on AudioNodeOptions {
 class AnalyserOptions implements AudioNodeOptions {
   external factory AnalyserOptions._(
       {int? fftSize,
-      double? maxDecibels,
-      double? minDecibels,
-      double? smoothingTimeConstant});
+        double? maxDecibels,
+        double? minDecibels,
+        double? smoothingTimeConstant});
 
   factory AnalyserOptions(
-          {int? fftSize,
-          double? maxDecibels,
-          double? minDecibels,
-          double? smoothingTimeConstant}) =>
+      {int? fftSize,
+        double? maxDecibels,
+        double? minDecibels,
+        double? smoothingTimeConstant}) =>
       AnalyserOptions._(
           fftSize: fftSize ?? 2048,
           maxDecibels: maxDecibels ?? -30,
@@ -370,9 +370,9 @@ class MediaStreamTrackEventInit {
 
 extension MediaStreamTrackEventInit$Typings on MediaStreamTrackEventInit {
   MediaStreamTrack get track => jsu.getProperty(
-        this,
-        'track',
-      );
+    this,
+    'track',
+  );
   set track(MediaStreamTrack value) {
     jsu.setProperty(
       this,
@@ -392,9 +392,9 @@ class EventListenerOrEventListenerObject {}
 @staticInterop
 class MediaStreamTrackEvent implements Event {
   factory MediaStreamTrackEvent(
-    String type,
-    MediaStreamTrackEventInit eventInitDict,
-  ) =>
+      String type,
+      MediaStreamTrackEventInit eventInitDict,
+      ) =>
       jsu.callConstructor(
         _declaredMediaStreamTrackEvent,
         [
@@ -412,9 +412,9 @@ external Object _declaredMediaStreamTrackEvent;
 
 extension MediaStreamTrackEvent$Typings on MediaStreamTrackEvent {
   MediaStreamTrack get track => jsu.getProperty(
-        this,
-        'track',
-      );
+    this,
+    'track',
+  );
 }
 
 enum MediaStreamEventMap<T$ extends Event> {
@@ -431,19 +431,19 @@ enum MediaStreamEventMap<T$ extends Event> {
 @staticInterop
 class MediaStream {
   factory MediaStream.$1() => jsu.callConstructor(
-        _declaredMediaStream,
-        [],
-      );
+    _declaredMediaStream,
+    [],
+  );
 
   factory MediaStream.$2(MediaStream stream) => jsu.callConstructor(
-        _declaredMediaStream,
-        [stream],
-      );
+    _declaredMediaStream,
+    [stream],
+  );
 
   factory MediaStream.$3(List<MediaStreamTrack> tracks) => jsu.callConstructor(
-        _declaredMediaStream,
-        [tracks],
-      );
+    _declaredMediaStream,
+    [tracks],
+  );
 }
 
 /*
@@ -454,13 +454,13 @@ external Object _declaredMediaStream;
 
 extension MediaStream$Typings on MediaStream {
   bool get active => jsu.getProperty(
-        this,
-        'active',
-      );
+    this,
+    'active',
+  );
   String get id => jsu.getProperty(
-        this,
-        'id',
-      );
+    this,
+    'id',
+  );
 
   void addTrack(MediaStreamTrack track) {
     jsu.callMethod(
@@ -471,33 +471,33 @@ extension MediaStream$Typings on MediaStream {
   }
 
   MediaStream clone() => jsu.callMethod(
-        this,
-        'clone',
-        [],
-      );
+    this,
+    'clone',
+    [],
+  );
   List<MediaStreamTrack> getAudioTracks() => (jsu.callMethod(
-        this,
-        'getAudioTracks',
-        [],
-      ) as List)
-          .cast();
+    this,
+    'getAudioTracks',
+    [],
+  ) as List)
+      .cast();
   MediaStreamTrack? getTrackById(String trackId) => jsu.callMethod(
-        this,
-        'getTrackById',
-        [trackId],
-      );
+    this,
+    'getTrackById',
+    [trackId],
+  );
   List<MediaStreamTrack> getTracks() => (jsu.callMethod(
-        this,
-        'getTracks',
-        [],
-      ) as List)
-          .cast();
+    this,
+    'getTracks',
+    [],
+  ) as List)
+      .cast();
   List<MediaStreamTrack> getVideoTracks() => (jsu.callMethod(
-        this,
-        'getVideoTracks',
-        [],
-      ) as List)
-          .cast();
+    this,
+    'getVideoTracks',
+    [],
+  ) as List)
+      .cast();
   void removeTrack(MediaStreamTrack track) {
     jsu.callMethod(
       this,
@@ -534,9 +534,9 @@ class MediaStreamConstraints {
 
 extension MediaStreamConstraintsExt on MediaStreamConstraints {
   Object? get audio => jsu.getProperty(
-        this,
-        'audio',
-      );
+    this,
+    'audio',
+  );
   set audio(Object? value) {
     jsu.setProperty(
       this,
@@ -546,9 +546,9 @@ extension MediaStreamConstraintsExt on MediaStreamConstraints {
   }
 
   String? get peerIdentity => jsu.getProperty(
-        this,
-        'peerIdentity',
-      );
+    this,
+    'peerIdentity',
+  );
   set peerIdentity(String? value) {
     jsu.setProperty(
       this,
@@ -558,9 +558,9 @@ extension MediaStreamConstraintsExt on MediaStreamConstraints {
   }
 
   bool? get preferCurrentTab => jsu.getProperty(
-        this,
-        'preferCurrentTab',
-      );
+    this,
+    'preferCurrentTab',
+  );
   set preferCurrentTab(bool? value) {
     jsu.setProperty(
       this,
@@ -570,9 +570,9 @@ extension MediaStreamConstraintsExt on MediaStreamConstraints {
   }
 
   Object? get video => jsu.getProperty(
-        this,
-        'video',
-      );
+    this,
+    'video',
+  );
   set video(Object? value) {
     jsu.setProperty(
       this,
@@ -699,9 +699,11 @@ extension PropsMediaTrackCapabilities on MediaTrackCapabilities {
     jsu.setProperty(this, 'latency', newValue);
   }
 
-  ULongRange get channelCount => jsu.getProperty(this, 'channelCount');
-  set channelCount(ULongRange newValue) {
-    jsu.setProperty(this, 'channelCount', newValue);
+  ULongRange? get channelCount => jsu.getProperty(this, 'channelCount');
+  set channelCount(ULongRange? newValue) {
+    if (newValue != null) {
+      jsu.setProperty(this, 'channelCount', newValue);
+    }
   }
 
   String get deviceId => jsu.getProperty(this, 'deviceId');
@@ -807,7 +809,7 @@ class AudioWorkletNode implements AudioNode {
       [AudioWorkletNodeOptions? options]);
 
   factory AudioWorkletNode(BaseAudioContext context, String name,
-          [AudioWorkletNodeOptions? options]) =>
+      [AudioWorkletNodeOptions? options]) =>
       AudioWorkletNode._(context, name, options ?? undefined);
 }
 
@@ -852,17 +854,17 @@ extension PropsMessagePort on MessagePort {
 class AudioWorkletNodeOptions implements AudioNodeOptions {
   external factory AudioWorkletNodeOptions._(
       {int? numberOfInputs,
-      int? numberOfOutputs,
-      Iterable<int>? outputChannelCount,
-      dynamic parameterData,
-      dynamic processorOptions});
+        int? numberOfOutputs,
+        Iterable<int>? outputChannelCount,
+        dynamic parameterData,
+        dynamic processorOptions});
 
   factory AudioWorkletNodeOptions(
-          {int? numberOfInputs,
-          int? numberOfOutputs,
-          Iterable<int>? outputChannelCount,
-          dynamic parameterData,
-          dynamic processorOptions}) =>
+      {int? numberOfInputs,
+        int? numberOfOutputs,
+        Iterable<int>? outputChannelCount,
+        dynamic parameterData,
+        dynamic processorOptions}) =>
       AudioWorkletNodeOptions._(
           numberOfInputs: numberOfInputs ?? 1,
           numberOfOutputs: numberOfOutputs ?? 1,
@@ -972,15 +974,15 @@ class MediaTrackSupportedConstraints {
   });
 
   factory MediaTrackSupportedConstraints(
-          {bool? sampleRate,
-          bool? sampleSize,
-          bool? echoCancellation,
-          bool? autoGainControl,
-          bool? noiseSuppression,
-          bool? latency,
-          bool? channelCount,
-          bool? deviceId,
-          bool? groupId}) =>
+      {bool? sampleRate,
+        bool? sampleSize,
+        bool? echoCancellation,
+        bool? autoGainControl,
+        bool? noiseSuppression,
+        bool? latency,
+        bool? channelCount,
+        bool? deviceId,
+        bool? groupId}) =>
       MediaTrackSupportedConstraints._(
           sampleRate: sampleRate ?? true,
           sampleSize: sampleSize ?? true,
@@ -994,7 +996,7 @@ class MediaTrackSupportedConstraints {
 }
 
 extension PropsMediaTrackSupportedConstraints
-    on MediaTrackSupportedConstraints {
+on MediaTrackSupportedConstraints {
   bool get sampleRate => jsu.getProperty(this, 'sampleRate');
   set sampleRate(bool newValue) {
     jsu.setProperty(this, 'sampleRate', newValue);
@@ -1081,13 +1083,13 @@ extension PropsMessageEvent on MessageEvent {
   dynamic get source => jsu.getProperty(this, 'source');
   Iterable<MessagePort> get ports => jsu.getProperty(this, 'ports');
   void initMessageEvent(String type,
-          [bool? bubbles = false,
-          bool? cancelable = false,
-          dynamic data,
-          String? origin = '',
-          String? lastEventId = '',
-          dynamic source,
-          Iterable<MessagePort>? ports = const []]) =>
+      [bool? bubbles = false,
+        bool? cancelable = false,
+        dynamic data,
+        String? origin = '',
+        String? lastEventId = '',
+        dynamic source,
+        Iterable<MessagePort>? ports = const []]) =>
       jsu.callMethod(this, 'initMessageEvent', [
         type,
         bubbles,
@@ -1106,17 +1108,17 @@ extension PropsMessageEvent on MessageEvent {
 class MessageEventInit implements EventInit {
   external factory MessageEventInit._(
       {dynamic data,
-      String? origin,
-      String? lastEventId,
-      dynamic source,
-      Iterable<MessagePort>? ports});
+        String? origin,
+        String? lastEventId,
+        dynamic source,
+        Iterable<MessagePort>? ports});
 
   factory MessageEventInit(
-          {dynamic data,
-          String? origin,
-          String? lastEventId,
-          dynamic source,
-          Iterable<MessagePort>? ports}) =>
+      {dynamic data,
+        String? origin,
+        String? lastEventId,
+        dynamic source,
+        Iterable<MessagePort>? ports}) =>
       MessageEventInit._(
           data: data ?? undefined,
           origin: origin ?? '',
@@ -1220,24 +1222,24 @@ extension PropsMediaRecorder on MediaRecorder {
 class MediaRecorderOptions {
   external factory MediaRecorderOptions._(
       {String? mimeType,
-      int? audioBitsPerSecond,
-      int? videoBitsPerSecond,
-      int? bitsPerSecond,
-      String? audioBitrateMode});
+        int? audioBitsPerSecond,
+        int? videoBitsPerSecond,
+        int? bitsPerSecond,
+        String? audioBitrateMode});
 
   factory MediaRecorderOptions(
-          {String? mimeType,
-          int? audioBitsPerSecond,
-          int? videoBitsPerSecond,
-          int? bitsPerSecond,
-          BitrateMode? audioBitrateMode}) =>
+      {String? mimeType,
+        int? audioBitsPerSecond,
+        int? videoBitsPerSecond,
+        int? bitsPerSecond,
+        BitrateMode? audioBitrateMode}) =>
       MediaRecorderOptions._(
           mimeType: mimeType ?? '',
           audioBitsPerSecond: audioBitsPerSecond ?? undefined,
           videoBitsPerSecond: videoBitsPerSecond ?? undefined,
           bitsPerSecond: bitsPerSecond ?? undefined,
           audioBitrateMode:
-              audioBitrateMode?.value ?? BitrateMode.variable.value);
+          audioBitrateMode?.value ?? BitrateMode.variable.value);
 }
 
 extension PropsMediaRecorderOptions on MediaRecorderOptions {
@@ -1381,9 +1383,9 @@ class MediaTrackConstraintSet {
 
 extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   ConstrainDouble? get aspectRatio => jsu.getProperty(
-        this,
-        'aspectRatio',
-      );
+    this,
+    'aspectRatio',
+  );
   set aspectRatio(ConstrainDouble? value) {
     jsu.setProperty(
       this,
@@ -1393,9 +1395,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   ConstrainBoolean? get autoGainControl => jsu.getProperty(
-        this,
-        'autoGainControl',
-      );
+    this,
+    'autoGainControl',
+  );
   set autoGainControl(ConstrainBoolean? value) {
     jsu.setProperty(
       this,
@@ -1405,9 +1407,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   double? get channelCount => jsu.getProperty(
-        this,
-        'channelCount',
-      );
+    this,
+    'channelCount',
+  );
   set channelCount(double? value) {
     jsu.setProperty(
       this,
@@ -1417,9 +1419,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   ConstrainDOMString? get deviceId => jsu.getProperty(
-        this,
-        'deviceId',
-      );
+    this,
+    'deviceId',
+  );
   set deviceId(ConstrainDOMString? value) {
     jsu.setProperty(
       this,
@@ -1429,9 +1431,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   ConstrainDOMString? get displaySurface => jsu.getProperty(
-        this,
-        'displaySurface',
-      );
+    this,
+    'displaySurface',
+  );
   set displaySurface(ConstrainDOMString? value) {
     jsu.setProperty(
       this,
@@ -1441,9 +1443,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   ConstrainBoolean? get echoCancellation => jsu.getProperty(
-        this,
-        'echoCancellation',
-      );
+    this,
+    'echoCancellation',
+  );
   set echoCancellation(ConstrainBoolean? value) {
     jsu.setProperty(
       this,
@@ -1453,9 +1455,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   ConstrainDOMString? get facingMode => jsu.getProperty(
-        this,
-        'facingMode',
-      );
+    this,
+    'facingMode',
+  );
   set facingMode(ConstrainDOMString? value) {
     jsu.setProperty(
       this,
@@ -1465,9 +1467,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   ConstrainDouble? get frameRate => jsu.getProperty(
-        this,
-        'frameRate',
-      );
+    this,
+    'frameRate',
+  );
   set frameRate(ConstrainDouble? value) {
     jsu.setProperty(
       this,
@@ -1477,9 +1479,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   ConstrainDOMString? get groupId => jsu.getProperty(
-        this,
-        'groupId',
-      );
+    this,
+    'groupId',
+  );
   set groupId(ConstrainDOMString? value) {
     jsu.setProperty(
       this,
@@ -1489,9 +1491,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   double? get height => jsu.getProperty(
-        this,
-        'height',
-      );
+    this,
+    'height',
+  );
   set height(double? value) {
     jsu.setProperty(
       this,
@@ -1501,9 +1503,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   ConstrainBoolean? get noiseSuppression => jsu.getProperty(
-        this,
-        'noiseSuppression',
-      );
+    this,
+    'noiseSuppression',
+  );
   set noiseSuppression(ConstrainBoolean? value) {
     jsu.setProperty(
       this,
@@ -1513,9 +1515,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   double? get sampleRate => jsu.getProperty(
-        this,
-        'sampleRate',
-      );
+    this,
+    'sampleRate',
+  );
   set sampleRate(double? value) {
     jsu.setProperty(
       this,
@@ -1525,9 +1527,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   double? get sampleSize => jsu.getProperty(
-        this,
-        'sampleSize',
-      );
+    this,
+    'sampleSize',
+  );
   set sampleSize(double? value) {
     jsu.setProperty(
       this,
@@ -1537,9 +1539,9 @@ extension MediaTrackConstraintSet$Typings on MediaTrackConstraintSet {
   }
 
   double? get width => jsu.getProperty(
-        this,
-        'width',
-      );
+    this,
+    'width',
+  );
   set width(double? value) {
     jsu.setProperty(
       this,
@@ -1609,10 +1611,10 @@ class MediaTrackConstraints implements MediaTrackConstraintSet {
 
 extension MediaTrackConstraints$Typings on MediaTrackConstraints {
   List<MediaTrackConstraintSet>? get advanced => (jsu.getProperty(
-        this,
-        'advanced',
-      ) as List?)
-          ?.cast();
+    this,
+    'advanced',
+  ) as List?)
+      ?.cast();
   set advanced(List<MediaTrackConstraintSet>? value) {
     jsu.setProperty(
       this,

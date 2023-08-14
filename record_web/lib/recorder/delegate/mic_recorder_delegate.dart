@@ -23,6 +23,9 @@ class MicRecorderDelegate extends RecorderDelegate {
   // Amplitude
   double _maxAmplitude = kMinAmplitude;
   double _amplitude = kMinAmplitude;
+  MediaStream? _currentStream;
+  MediaStreamAudioSourceNode? _currentStreamSource;
+  AudioWorkletNode? _currentNode;
 
   MicRecorderDelegate({required this.onStateChanged});
 
@@ -101,6 +104,10 @@ class MicRecorderDelegate extends RecorderDelegate {
     }
 
     onStateChanged(RecordState.stop);
+    _currentStream?.getAudioTracks().forEach((element) { element.stop();});
+    _currentStream = null;
+    _currentStreamSource?.disconnect(_currentNode);
+    _currentNode = null;
 
     final blob = _encoder?.finish();
     _encoder = null;
@@ -115,7 +122,11 @@ class MicRecorderDelegate extends RecorderDelegate {
 
     final constraints = MediaStreamConstraints(
       audio: config.device == null
-          ? true
+          ? {
+        'autoGainControl': false,
+        'echoCancellation': false,
+        'noiseSuppression': false
+      }
           : {
         'deviceId': {'exact': config.device!.id}
       },
@@ -123,25 +134,28 @@ class MicRecorderDelegate extends RecorderDelegate {
 
     final context = AudioContext();
     final microphone = await mediaDevices.getUserMedia(constraints);
+    _currentStream = microphone;
     if (config.sampleRate > microphone.getAudioTracks()[0].getCapabilities().sampleRate.max) {
       config.sampleRate = microphone.getAudioTracks()[0].getCapabilities().sampleRate.max;
     } else if (config.sampleRate < microphone.getAudioTracks()[0].getCapabilities().sampleRate.min) {
       config.sampleRate = microphone.getAudioTracks()[0].getCapabilities().sampleRate.min;
     }
 
-    if (config.numChannels > microphone.getAudioTracks()[0].getCapabilities().channelCount.max) {
-      config.numChannels = microphone.getAudioTracks()[0].getCapabilities().channelCount.max;
-    } else if (config.numChannels < microphone.getAudioTracks()[0].getCapabilities().channelCount.min) {
-      config.numChannels = microphone.getAudioTracks()[0].getCapabilities().channelCount.min;
+    if (config.numChannels > (microphone.getAudioTracks()[0].getCapabilities().channelCount?.max ?? 1)) {
+      config.numChannels = microphone.getAudioTracks()[0].getCapabilities().channelCount?.max ?? 1;
+    } else if (config.numChannels < (microphone.getAudioTracks()[0].getCapabilities().channelCount?.min ?? 1)) {
+      config.numChannels = microphone.getAudioTracks()[0].getCapabilities().channelCount?.min ?? 1;
     }
 
     final source = context.createMediaStreamSource(microphone);
+    _currentStreamSource = source;
 
     await context.audioWorklet.addModule(
       '/assets/packages/record_web/assets/js/record.worklet.js',
     );
 
     final recorder = AudioWorkletNode(context, 'recorder.worklet');
+    _currentNode = recorder;
     source.connect(recorder).connect(context.destination);
 
     if (!isStream) {
@@ -156,6 +170,7 @@ class MicRecorderDelegate extends RecorderDelegate {
         _encoder = PcmEncoder();
       } else if (config.encoder == AudioEncoder.mp3) {
         _encoder = MP3Encoder(sampleRate: config.sampleRate, channels: config.numChannels, kbps: config.bitRate ~/ 1000);
+        print('initialised encoder');
       }
     }
 
