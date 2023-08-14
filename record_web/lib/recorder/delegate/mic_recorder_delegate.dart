@@ -122,9 +122,9 @@ class MicRecorderDelegate extends RecorderDelegate {
     );
 
     final context = AudioContext();
+    final microphone = await mediaDevices.getUserMedia(constraints);
     print('sample rate ${microphone.getAudioTracks()[0].getCapabilities().sampleRate}');
     print('channel count ${microphone.getAudioTracks()[0].getCapabilities().channelCount}');
-    final microphone = await mediaDevices.getUserMedia(constraints);
     if (config.sampleRate > microphone.getAudioTracks()[0].getCapabilities().sampleRate.max) {
       config.sampleRate = microphone.getAudioTracks()[0].getCapabilities().sampleRate.max;
     } else if (config.sampleRate < microphone.getAudioTracks()[0].getCapabilities().sampleRate.min) {
