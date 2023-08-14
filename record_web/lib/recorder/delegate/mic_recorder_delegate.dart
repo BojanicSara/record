@@ -170,7 +170,6 @@ class MicRecorderDelegate extends RecorderDelegate {
         _encoder = PcmEncoder();
       } else if (config.encoder == AudioEncoder.mp3) {
         _encoder = MP3Encoder(sampleRate: config.sampleRate, channels: config.numChannels, kbps: config.bitRate ~/ 1000);
-        print('initialised encoder');
       }
     }
 
