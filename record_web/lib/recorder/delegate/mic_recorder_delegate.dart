@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:js_util' as jsu;
 
+import 'package:flutter/foundation.dart';
 import 'package:record_platform_interface/record_platform_interface.dart';
 import 'package:record_web/encoder/encoder.dart';
 import 'package:record_web/encoder/pcm_encoder.dart';
@@ -150,9 +151,15 @@ class MicRecorderDelegate extends RecorderDelegate {
     final source = context.createMediaStreamSource(microphone);
     _currentStreamSource = source;
 
-    await context.audioWorklet.addModule(
-      '/assets/packages/record_web/assets/js/record.worklet.js',
-    );
+    if (kDebugMode == true) {
+      await context.audioWorklet.addModule(
+        '/assets/packages/record_web/assets/js/record.worklet.js',
+      );
+    } else {
+      await context.audioWorklet.addModule(
+        '/assets/js/record.worklet.js',
+      );
+    }
 
     final recorder = AudioWorkletNode(context, 'recorder.worklet');
     _currentNode = recorder;
