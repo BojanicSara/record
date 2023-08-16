@@ -9,15 +9,15 @@ import 'package:record_web/js/js_import_library.dart';
 
 class RecordPluginWeb {
   static void registerWith(Registrar registrar) {
-    ImportJsLibrary().importJsLibrary(
-      url: 'assets/js/record.worklet.js',
-      flutterPluginName: 'record_web',
-    );
-
-    ImportJsLibrary().import(
-      jsFixWebmDurationContent(),
-      jsFixWebmDurationContentId(),
-    );
+    // ImportJsLibrary().importJsLibrary(
+    //   url: 'assets/js/record.worklet.js',
+    //   flutterPluginName: 'record_web',
+    // );
+    //
+    // ImportJsLibrary().import(
+    //   jsFixWebmDurationContent(),
+    //   jsFixWebmDurationContentId(),
+    // );
 
     RecordPlatform.instance = RecordPluginWebWrapper();
   }
