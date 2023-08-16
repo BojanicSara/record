@@ -152,7 +152,7 @@ class MicRecorderDelegate extends RecorderDelegate {
     _currentStreamSource = source;
 
     await context.audioWorklet.addModule(
-      './js/record.worklet.js',
+      'worklets/record.worklet.js',
     );
     // if (kDebugMode == true) {
     //   await context.audioWorklet.addModule(
