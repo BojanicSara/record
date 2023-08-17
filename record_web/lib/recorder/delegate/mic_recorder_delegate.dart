@@ -142,12 +142,6 @@ class MicRecorderDelegate extends RecorderDelegate {
       config.sampleRate = microphone.getAudioTracks()[0].getCapabilities().sampleRate.min;
     }
 
-    if (config.numChannels > (microphone.getAudioTracks()[0].getCapabilities().channelCount?.max ?? 1)) {
-      config.numChannels = microphone.getAudioTracks()[0].getCapabilities().channelCount?.max ?? 1;
-    } else if (config.numChannels < (microphone.getAudioTracks()[0].getCapabilities().channelCount?.min ?? 1)) {
-      config.numChannels = microphone.getAudioTracks()[0].getCapabilities().channelCount?.min ?? 1;
-    }
-
     final source = context.createMediaStreamSource(microphone);
     _currentStreamSource = source;
 
@@ -174,12 +168,12 @@ class MicRecorderDelegate extends RecorderDelegate {
       if (config.encoder == AudioEncoder.wav) {
         _encoder = WavEncoder(
           sampleRate: config.sampleRate,
-          numChannels: config.numChannels,
+          numChannels: 1,
         );
       } else if (config.encoder == AudioEncoder.pcm16bits) {
         _encoder = PcmEncoder();
       } else if (config.encoder == AudioEncoder.mp3) {
-        _encoder = MP3Encoder(sampleRate: config.sampleRate, channels: config.numChannels, kbps: config.bitRate ~/ 1000);
+        _encoder = MP3Encoder(sampleRate: config.sampleRate, channels: 1, kbps: config.bitRate ~/ 1000);
       }
     }
 
