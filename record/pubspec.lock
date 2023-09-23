@@ -104,8 +104,8 @@ packages:
     dependency: "direct main"
     description:
       path: record_darwin
-      ref: HEAD
-      resolved-ref: "7ad340f43fe9ad94f680585b80fa4007cb300697"
+      ref: ios-fix
+      resolved-ref: b0c4e1a28509cdf481b560c24ae35f6c059584aa
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2+1"
