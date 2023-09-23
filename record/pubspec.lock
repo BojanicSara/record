@@ -34,10 +34,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_lints
-      sha256: aeb0b80a8b3709709c9cc496cdc027c5b3216796bc0af0ce1007eaf24464fd4c
+      sha256: a25a15ebbdfc33ab1cd26c63a6ee519df92338a9c10f122adda92938253bef04
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.3"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -87,16 +87,16 @@ packages:
     dependency: transitive
     description:
       name: plugin_platform_interface
-      sha256: "6a2128648c854906c53fa8e33986fc0247a1116122f9534dd20e3ab9e16a32bc"
+      sha256: da3fdfeccc4d4ff2da8f8c556704c08f912542c5fb3cf2233ed75372384a034d
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.6"
   record_android:
     dependency: "direct main"
     description:
       path: record_android
       ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      resolved-ref: "7ad340f43fe9ad94f680585b80fa4007cb300697"
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2"
@@ -105,7 +105,7 @@ packages:
     description:
       path: record_darwin
       ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      resolved-ref: "7ad340f43fe9ad94f680585b80fa4007cb300697"
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2+1"
@@ -114,7 +114,7 @@ packages:
     description:
       path: record_linux
       ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      resolved-ref: "7ad340f43fe9ad94f680585b80fa4007cb300697"
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "0.6.0"
@@ -123,7 +123,7 @@ packages:
     description:
       path: record_platform_interface
       ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      resolved-ref: "7ad340f43fe9ad94f680585b80fa4007cb300697"
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.1"
@@ -132,7 +132,7 @@ packages:
     description:
       path: record_web
       ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      resolved-ref: "7ad340f43fe9ad94f680585b80fa4007cb300697"
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2"
@@ -141,7 +141,7 @@ packages:
     description:
       path: record_windows
       ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      resolved-ref: "7ad340f43fe9ad94f680585b80fa4007cb300697"
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2"
