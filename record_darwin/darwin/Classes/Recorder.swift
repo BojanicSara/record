@@ -149,23 +149,32 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   }
 
   private func stopRecording() {
+    print("STOP RECORDING CALLED")
     if let audioWriter = m_audioWriter {
+    print("STOP RECORDING CALLED #2")
       if audioWriter.status == .writing {
+    print("STOP RECORDING CALLED #3")
           m_writerInput?.markAsFinished()
+    print("STOP RECORDING CALLED #4")
           DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+    print("STOP RECORDING CALLED #5")
             audioWriter.finishWriting {
+    print("STOP RECORDING CALLED #6")
               self._reset()
               self.updateState(RecordState.stop)
             }
           }
       } else {
+    print("STOP RECORDING CALLED #1.1")
         _reset()
         updateState(RecordState.stop)
       }
     } else {
+    print("STOP RECORDING CALLED #1.2")
       _reset()
       updateState(RecordState.stop)
     }
+    print("STOP RECORDING CALLED DONE")
   }
 
   private func _reset() {
