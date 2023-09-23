@@ -152,7 +152,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
     m_writerInput?.markAsFinished()
 
     if let audioWriter = m_audioWriter {
-      audioWriter.finishWriting(completionHandler: { [weak self] in
+      audioWriter.finishWritingWithCompletionHandler(completionHandler: { [weak self] in
         self?._reset()
         self?.updateState(RecordState.stop)
       })
