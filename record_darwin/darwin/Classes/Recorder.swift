@@ -43,7 +43,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   }
   
   func start(config: RecordConfig, path: String) throws {
-    //stopRecording()
+    stopRecording()
     
     try deleteFile(path: path)
     
@@ -151,12 +151,13 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   private func stopRecording() {
     if let audioWriter = m_audioWriter {
       if audioWriter.status == .writing {
-          m_audioSession?.stopRunning()
           m_writerInput?.markAsFinished()
-          audioWriter.finishWriting(completionHandler: { [weak self] in
-            self?._reset()
-            self?.updateState(RecordState.stop)
-          })
+          DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            audioWriter.finishWriting {
+              self._reset()
+              self.updateState(RecordState.stop)
+            }
+          }
       } else {
         _reset()
         updateState(RecordState.stop)
