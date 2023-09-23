@@ -43,7 +43,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   }
   
   func start(config: RecordConfig, path: String) throws {
-    stopRecording()
+    //stopRecording()
     
     try deleteFile(path: path)
     
