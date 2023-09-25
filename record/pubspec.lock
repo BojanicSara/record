@@ -105,7 +105,7 @@ packages:
     description:
       path: record_darwin
       ref: ios-fix-2
-      resolved-ref: a9974c07b98049e996f8ac11d3e206923ff85c6e
+      resolved-ref: "6ea180ede06ce82991769de1dea9dd4a22041832"
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2+1"
