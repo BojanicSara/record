@@ -212,6 +212,10 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
     m_path = nil
     m_state = .stop
     m_config = nil
+
+    if (m_defaultCategory != nil) {
+        _revertToDefaultAudioSessionCategory()
+    }
   }
   
   private func createRecordingSession(
