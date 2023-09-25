@@ -44,7 +44,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   }
   
   func start(config: RecordConfig, path: String) throws {
-    if (isStopping == false) {
+    if (m_isStopping == false) {
         stopRecording()
 
         try deleteFile(path: path)
@@ -73,7 +73,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   }
   
   func startStream(config: RecordConfig) throws {
-    if (isStopping == false) {
+    if (m_isStopping == false) {
         stopRecording()
 
         if config.encoder != AudioEncoder.pcm16bits.rawValue {
@@ -154,25 +154,25 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   }
 
   private func stopRecording() {
-    if (isStopping == false) {
-        isStopping = true
+    if (m_isStopping == false) {
+        m_isStopping = true
         if let audioWriter = m_audioWriter {
           if audioWriter.status == .writing {
               m_writerInput?.markAsFinished()
               audioWriter.finishWriting {
                 self._reset()
                 self.updateState(RecordState.stop)
-                isStopping = false
+                m_isStopping = false
               }
           } else {
             _reset()
             updateState(RecordState.stop)
-            isStopping = false
+            m_isStopping = false
           }
         } else {
           _reset()
           updateState(RecordState.stop)
-          isStopping = false
+          m_isStopping = false
         }
     }
   }
