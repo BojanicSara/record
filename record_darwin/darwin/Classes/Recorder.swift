@@ -46,6 +46,11 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   func start(config: RecordConfig, path: String) throws {
     if (m_isStopping == false) {
         stopRecording()
+
+        let options: AVAudioSession.CategoryOptions = [.defaultToSpeaker, .allowBluetooth]
+        try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: options)
+        try AVAudioSession.sharedInstance().setActive(true)
+
         try deleteFile(path: path)
 
         if !isEncoderSupported(config.encoder) {
