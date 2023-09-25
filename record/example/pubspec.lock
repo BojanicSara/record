@@ -271,8 +271,8 @@ packages:
     dependency: transitive
     description:
       path: record_darwin
-      ref: ios-fix
-      resolved-ref: b0c4e1a28509cdf481b560c24ae35f6c059584aa
+      ref: ios-fix-2
+      resolved-ref: fb3475853ff87e861a6e273670b6f3f223c36e62
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2+1"

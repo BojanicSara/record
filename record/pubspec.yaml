@@ -39,7 +39,7 @@ dependencies:
     git:
       url: 'https://github.com/BojanicSara/record.git'
       path: './record_darwin/'
-      ref: 'ios-fix'
+      ref: 'ios-fix-2'
 
 dev_dependencies:
   # https://pub.dev/packages/flutter_lints
