@@ -29,7 +29,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   private var m_state: RecordState = RecordState.stop
   private var m_hasBeenPaused: Bool = false
   private var m_config: RecordConfig?
-  private var m_defaultCategory: AVAudioSessionCategory?
+  private var m_defaultCategory: AVAudioSession.Category?
   
   private var m_stateEventHandler: StateStreamHandler
   private var m_recordEventHandler: RecordStreamHandler
