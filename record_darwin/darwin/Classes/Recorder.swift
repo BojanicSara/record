@@ -29,6 +29,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   private var m_state: RecordState = RecordState.stop
   private var m_hasBeenPaused: Bool = false
   private var m_config: RecordConfig?
+  private var m_defaultCategory: AVAudioSessionCategory?
   
   private var m_stateEventHandler: StateStreamHandler
   private var m_recordEventHandler: RecordStreamHandler
@@ -47,6 +48,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
     if (m_isStopping == false) {
         stopRecording()
 
+        m_defaultCategory = AVAudioSession.sharedInstance().category
         let options: AVAudioSession.CategoryOptions = [.defaultToSpeaker, .allowBluetooth]
         try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: options)
         try AVAudioSession.sharedInstance().setActive(true)
@@ -160,8 +162,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   private func stopRecording() {
     if (m_isStopping == false) {
         do {
-           try AVAudioSession.sharedInstance().setActive(false)
-           try AVAudioSession.sharedInstance().setCategory(.playback)
+           try AVAudioSession.sharedInstance().setCategory(m_defaultCategory!)
            try AVAudioSession.sharedInstance().setActive(true)
         } catch {
            print(error)
