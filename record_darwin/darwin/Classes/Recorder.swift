@@ -159,7 +159,12 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
 
   private func stopRecording() {
     if (m_isStopping == false) {
-        try AVAudioSession.sharedInstance().setCategory(.playback)
+        do {
+           try AVAudioSession.sharedInstance().setCategory(.playback)
+        } catch {
+           print(error)
+        }
+
         m_isStopping = true
         if let audioWriter = m_audioWriter {
           if audioWriter.status == .writing {
