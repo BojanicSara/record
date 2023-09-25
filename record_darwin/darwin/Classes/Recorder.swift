@@ -161,13 +161,6 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
 
   private func stopRecording() {
     if (m_isStopping == false) {
-        do {
-           try AVAudioSession.sharedInstance().setCategory(m_defaultCategory!)
-           try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-           print(error)
-        }
-
         m_isStopping = true
         if let audioWriter = m_audioWriter {
           if audioWriter.status == .writing {
@@ -190,6 +183,17 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
     }
   }
 
+
+  private func _revertToDefaultAudioSessionCategory() {
+    do {
+       try AVAudioSession.sharedInstance().setCategory(m_defaultCategory!)
+       try AVAudioSession.sharedInstance().setActive(true)
+    } catch {
+       print(error)
+    }
+ }
+
+
   private func _reset() {
     m_writerInput = nil
     m_audioWriter = nil
@@ -208,6 +212,10 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
     m_path = nil
     m_state = .stop
     m_config = nil
+
+    if (m_defaultCategory != nil) {
+        _revertToDefaultAudioSessionCategory()
+    }
   }
   
   private func createRecordingSession(
