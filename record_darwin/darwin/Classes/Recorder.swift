@@ -46,8 +46,6 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   func start(config: RecordConfig, path: String) throws {
     if (m_isStopping == false) {
         stopRecording()
-        try AVAudioSession.sharedInstance().setActive(true)
-
         try deleteFile(path: path)
 
         if !isEncoderSupported(config.encoder) {
