@@ -32,6 +32,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   
   private var m_stateEventHandler: StateStreamHandler
   private var m_recordEventHandler: RecordStreamHandler
+  private var m_isStopping: Bool = false
   
   init(stateEventHandler: StateStreamHandler, recordEventHandler: RecordStreamHandler) {
     m_stateEventHandler = stateEventHandler
@@ -43,50 +44,54 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   }
   
   func start(config: RecordConfig, path: String) throws {
-    stopRecording()
-    
-    try deleteFile(path: path)
-    
-    if !isEncoderSupported(config.encoder) {
-      throw RecorderError.error(message: "Failed to start recording", details: "\(config.encoder) not supported.")
-    }
-    
-    let dev = try getRecordingInputDevice(config: config)
-    
-    let result = try createRecordingSession(config, dev: dev)
-    
-    let writer = try createWriter(config: config, path: path)
+    if (isStopping == false) {
+        stopRecording()
 
-    // start recording
-    DispatchQueue.global(qos: .background).async {
-      writer.startWriting()
-      result.session.startRunning()
+        try deleteFile(path: path)
 
-      self.m_config = config
-      self.m_dev = dev
-      self.m_path = path
-      self.updateState(RecordState.record)
+        if !isEncoderSupported(config.encoder) {
+          throw RecorderError.error(message: "Failed to start recording", details: "\(config.encoder) not supported.")
+        }
+
+        let dev = try getRecordingInputDevice(config: config)
+
+        let result = try createRecordingSession(config, dev: dev)
+
+        let writer = try createWriter(config: config, path: path)
+
+        // start recording
+        DispatchQueue.global(qos: .background).async {
+          writer.startWriting()
+          result.session.startRunning()
+
+          self.m_config = config
+          self.m_dev = dev
+          self.m_path = path
+          self.updateState(RecordState.record)
+        }
     }
   }
   
   func startStream(config: RecordConfig) throws {
-    stopRecording()
-    
-    if config.encoder != AudioEncoder.pcm16bits.rawValue {
-      throw RecorderError.error(message: "Failed to start recording", details: "\(config.encoder) not supported in streaming mode.")
-    }
-    
-    let dev = try getRecordingInputDevice(config: config)
-    
-    let result = try createRecordingSession(config, dev: dev)
-    
-    // start recording
-    DispatchQueue.global(qos: .background).async {
-      result.session.startRunning()
+    if (isStopping == false) {
+        stopRecording()
 
-      self.m_config = config
-      self.m_dev = dev
-      self.updateState(RecordState.record)
+        if config.encoder != AudioEncoder.pcm16bits.rawValue {
+          throw RecorderError.error(message: "Failed to start recording", details: "\(config.encoder) not supported in streaming mode.")
+        }
+
+        let dev = try getRecordingInputDevice(config: config)
+
+        let result = try createRecordingSession(config, dev: dev)
+
+        // start recording
+        DispatchQueue.global(qos: .background).async {
+          result.session.startRunning()
+
+          self.m_config = config
+          self.m_dev = dev
+          self.updateState(RecordState.record)
+        }
     }
   }
   
@@ -149,32 +154,27 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   }
 
   private func stopRecording() {
-    print("STOP RECORDING CALLED")
-    if let audioWriter = m_audioWriter {
-    print("STOP RECORDING CALLED #2")
-      if audioWriter.status == .writing {
-    print("STOP RECORDING CALLED #3")
-          m_writerInput?.markAsFinished()
-    print("STOP RECORDING CALLED #4")
-          DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-    print("STOP RECORDING CALLED #5")
-            audioWriter.finishWriting {
-    print("STOP RECORDING CALLED #6")
-              self._reset()
-              self.updateState(RecordState.stop)
-            }
+    if (isStopping == false) {
+        isStopping = true
+        if let audioWriter = m_audioWriter {
+          if audioWriter.status == .writing {
+              m_writerInput?.markAsFinished()
+              audioWriter.finishWriting {
+                self._reset()
+                self.updateState(RecordState.stop)
+                isStopping = false
+              }
+          } else {
+            _reset()
+            updateState(RecordState.stop)
+            isStopping = false
           }
-      } else {
-    print("STOP RECORDING CALLED #1.1")
-        _reset()
-        updateState(RecordState.stop)
-      }
-    } else {
-    print("STOP RECORDING CALLED #1.2")
-      _reset()
-      updateState(RecordState.stop)
+        } else {
+          _reset()
+          updateState(RecordState.stop)
+          isStopping = false
+        }
     }
-    print("STOP RECORDING CALLED DONE")
   }
 
   private func _reset() {
