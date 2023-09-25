@@ -162,7 +162,7 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
               audioWriter.finishWriting {
                 self._reset()
                 self.updateState(RecordState.stop)
-                m_isStopping = false
+                self.m_isStopping = false
               }
           } else {
             _reset()
