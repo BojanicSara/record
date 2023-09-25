@@ -29,10 +29,12 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   private var m_state: RecordState = RecordState.stop
   private var m_hasBeenPaused: Bool = false
   private var m_config: RecordConfig?
-  
+  private var m_defaultCategory: AVAudioSession.Category?
+
   private var m_stateEventHandler: StateStreamHandler
   private var m_recordEventHandler: RecordStreamHandler
-  
+  private var m_isStopping: Bool = false
+
   init(stateEventHandler: StateStreamHandler, recordEventHandler: RecordStreamHandler) {
     m_stateEventHandler = stateEventHandler
     m_recordEventHandler = recordEventHandler
@@ -43,50 +45,59 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   }
   
   func start(config: RecordConfig, path: String) throws {
-    stopRecording()
-    
-    try deleteFile(path: path)
-    
-    if !isEncoderSupported(config.encoder) {
-      throw RecorderError.error(message: "Failed to start recording", details: "\(config.encoder) not supported.")
-    }
-    
-    let dev = try getRecordingInputDevice(config: config)
-    
-    let result = try createRecordingSession(config, dev: dev)
-    
-    let writer = try createWriter(config: config, path: path)
+    if (m_isStopping == false) {
+        m_defaultCategory = AVAudioSession.sharedInstance().category
+        stopRecording()
+        let options: AVAudioSession.CategoryOptions = [.defaultToSpeaker, .allowBluetooth]
+        try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: options)
+        try AVAudioSession.sharedInstance().setActive(true)
 
-    // start recording
-    DispatchQueue.global(qos: .background).async {
-      writer.startWriting()
-      result.session.startRunning()
+        try deleteFile(path: path)
 
-      self.m_config = config
-      self.m_dev = dev
-      self.m_path = path
-      self.updateState(RecordState.record)
+        if !isEncoderSupported(config.encoder) {
+          throw RecorderError.error(message: "Failed to start recording", details: "\(config.encoder) not supported.")
+        }
+
+        let dev = try getRecordingInputDevice(config: config)
+
+        let result = try createRecordingSession(config, dev: dev)
+
+        let writer = try createWriter(config: config, path: path)
+
+        // start recording
+        DispatchQueue.global(qos: .background).async {
+          writer.startWriting()
+          result.session.startRunning()
+
+          self.m_config = config
+          self.m_dev = dev
+          self.m_path = path
+          self.updateState(RecordState.record)
+        }
     }
   }
   
   func startStream(config: RecordConfig) throws {
-    stopRecording()
-    
-    if config.encoder != AudioEncoder.pcm16bits.rawValue {
-      throw RecorderError.error(message: "Failed to start recording", details: "\(config.encoder) not supported in streaming mode.")
-    }
-    
-    let dev = try getRecordingInputDevice(config: config)
-    
-    let result = try createRecordingSession(config, dev: dev)
-    
-    // start recording
-    DispatchQueue.global(qos: .background).async {
-      result.session.startRunning()
+        m_defaultCategory = AVAudioSession.sharedInstance().category
+    if (m_isStopping == false) {
+        stopRecording()
 
-      self.m_config = config
-      self.m_dev = dev
-      self.updateState(RecordState.record)
+        if config.encoder != AudioEncoder.pcm16bits.rawValue {
+          throw RecorderError.error(message: "Failed to start recording", details: "\(config.encoder) not supported in streaming mode.")
+        }
+
+        let dev = try getRecordingInputDevice(config: config)
+
+        let result = try createRecordingSession(config, dev: dev)
+
+        // start recording
+        DispatchQueue.global(qos: .background).async {
+          result.session.startRunning()
+
+          self.m_config = config
+          self.m_dev = dev
+          self.updateState(RecordState.record)
+        }
     }
   }
   
@@ -149,18 +160,39 @@ class Recorder: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
   }
 
   private func stopRecording() {
-    m_writerInput?.markAsFinished()
-
-    if let audioWriter = m_audioWriter {
-      audioWriter.finishWriting(completionHandler: { [weak self] in
-        self?._reset()
-        self?.updateState(RecordState.stop)
-      })
-    } else {
-      _reset()
-      updateState(RecordState.stop)
+    if (m_isStopping == false) {
+        m_isStopping = true
+        if let audioWriter = m_audioWriter {
+          if audioWriter.status == .writing {
+              m_writerInput?.markAsFinished()
+              audioWriter.finishWriting {
+                self._reset()
+                self.updateState(RecordState.stop)
+                self.m_isStopping = false
+              }
+          } else {
+            _reset()
+            updateState(RecordState.stop)
+            m_isStopping = false
+          }
+        } else {
+          _reset()
+          updateState(RecordState.stop)
+          m_isStopping = false
+        }
     }
   }
+
+
+  private func _revertToDefaultAudioSessionCategory() {
+    do {
+       try AVAudioSession.sharedInstance().setCategory(m_defaultCategory!)
+       try AVAudioSession.sharedInstance().setActive(true)
+    } catch {
+       print(error)
+    }
+ }
+
 
   private func _reset() {
     m_writerInput = nil
