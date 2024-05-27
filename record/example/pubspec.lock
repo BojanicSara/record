@@ -262,8 +262,8 @@ packages:
     dependency: transitive
     description:
       path: record_android
-      ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      ref: android-update
+      resolved-ref: e6b2a4c270f175b9b6857625076a38b8862bb9fd
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2"
@@ -271,8 +271,8 @@ packages:
     dependency: transitive
     description:
       path: record_darwin
-      ref: ios-issues-fixed
-      resolved-ref: d1d9de964e05c494dc165ff5b67e54ba71057236
+      ref: android-update
+      resolved-ref: e6b2a4c270f175b9b6857625076a38b8862bb9fd
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2+1"
@@ -280,8 +280,8 @@ packages:
     dependency: transitive
     description:
       path: record_linux
-      ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      ref: android-update
+      resolved-ref: e6b2a4c270f175b9b6857625076a38b8862bb9fd
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "0.6.0"
@@ -289,17 +289,17 @@ packages:
     dependency: transitive
     description:
       path: record_platform_interface
-      ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      ref: android-update
+      resolved-ref: e6b2a4c270f175b9b6857625076a38b8862bb9fd
       url: "https://github.com/BojanicSara/record.git"
     source: git
-    version: "1.0.1"
+    version: "1.0.2"
   record_web:
     dependency: transitive
     description:
       path: record_web
-      ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      ref: android-update
+      resolved-ref: e6b2a4c270f175b9b6857625076a38b8862bb9fd
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2"
@@ -307,8 +307,8 @@ packages:
     dependency: transitive
     description:
       path: record_windows
-      ref: HEAD
-      resolved-ref: "15fbdaeda1fdc65df9be41b0805c91d858c29b89"
+      ref: android-update
+      resolved-ref: e6b2a4c270f175b9b6857625076a38b8862bb9fd
       url: "https://github.com/BojanicSara/record.git"
     source: git
     version: "1.0.0-beta.2"
@@ -390,5 +390,5 @@ packages:
     source: hosted
     version: "1.0.0"
 sdks:
-  dart: ">=3.2.0-0 <4.0.0"
-  flutter: ">=3.3.0"
+  dart: ">=3.3.0 <4.0.0"
+  flutter: ">=3.16.0"
