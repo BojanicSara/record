@@ -82,7 +82,7 @@ class RecordConfig {
 class AndroidRecordConfig {
   /// Uses Android MediaRecorder if [true].
   ///
-  /// Uses advanced recorder with media codecs and additionnal features
+  /// Uses advanced recorder with media codecs and additional features
   /// by default.
   final bool useLegacy;
 
