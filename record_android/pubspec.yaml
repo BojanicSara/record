@@ -17,6 +17,7 @@ dependencies:
     git:
       url: 'https://github.com/BojanicSara/record.git'
       path: './record_platform_interface/'
+      ref: 'android-update'
 
 flutter:
   plugin:
