@@ -53,7 +53,7 @@ abstract class RecordPlatform extends PlatformInterface {
   /// When stopping the record, you must rely on stream close event to get
   /// full recorded data.
   Future<Stream<Uint8List>> startStream(
-          String recorderId, RecordConfig config) =>
+      String recorderId, RecordConfig config) =>
       throw UnimplementedError(
           'startStream not implemented on the current platform.');
 

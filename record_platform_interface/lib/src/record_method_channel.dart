@@ -72,9 +72,9 @@ class RecordMethodChannel extends RecordPlatform {
 
   @override
   Future<Stream<Uint8List>> startStream(
-    String recorderId,
-    RecordConfig config,
-  ) async {
+      String recorderId,
+      RecordConfig config,
+      ) async {
     final eventRecordChannel = EventChannel(
       'com.llfbandit.record/eventsRecord/$recorderId',
     );
@@ -130,9 +130,9 @@ class RecordMethodChannel extends RecordPlatform {
 
   @override
   Future<bool> isEncoderSupported(
-    String recorderId,
-    AudioEncoder encoder,
-  ) async {
+      String recorderId,
+      AudioEncoder encoder,
+      ) async {
     final isSupported = await _methodChannel.invokeMethod<bool>(
       'isEncoderSupported',
       {'encoder': encoder.name, 'recorderId': recorderId},
@@ -149,8 +149,8 @@ class RecordMethodChannel extends RecordPlatform {
     );
 
     return devices
-            ?.map((d) => InputDevice.fromMap(d as Map))
-            .toList(growable: false) ??
+        ?.map((d) => InputDevice.fromMap(d as Map))
+        .toList(growable: false) ??
         [];
   }
 
@@ -162,6 +162,6 @@ class RecordMethodChannel extends RecordPlatform {
 
     return eventChannel.receiveBroadcastStream().map<RecordState>(
           (state) => RecordState.values.firstWhere((e) => e.index == state),
-        );
+    );
   }
 }

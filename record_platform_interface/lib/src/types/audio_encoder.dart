@@ -36,8 +36,6 @@ enum AudioEncoder {
   ///
   /// SDK 29 on Android
   ///
-  /// SDK 11 on iOs
-  ///
   /// Suggested file extension: `opus`
   opus,
 

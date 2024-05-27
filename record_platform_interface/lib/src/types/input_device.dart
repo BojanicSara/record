@@ -5,40 +5,36 @@ class InputDevice {
   /// The label text representation.
   final String label;
 
-  /// The number of channels for the device.
-  final int? channels;
-
-  /// The sample rate for the device.
-  final int? sampleRate;
-
   const InputDevice({
     required this.id,
     required this.label,
-    this.channels,
-    this.sampleRate,
   });
 
   factory InputDevice.fromMap(Map map) => InputDevice(
-        id: map['id'],
-        label: map['label'],
-        channels: map['channels'],
-        sampleRate: map['sampleRate'],
-      );
+    id: map['id'],
+    label: map['label'],
+  );
 
   Map<String, dynamic> toMap() => {
-        'id': id,
-        'label': label,
-        'channels': channels,
-        'sampleRate': sampleRate,
-      };
+    'id': id,
+    'label': label,
+  };
 
   @override
   String toString() {
     return '''
       id: $id
       label: $label
-      channels: $channels
-      sampleRate: $sampleRate
       ''';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is InputDevice && other.id == id && other.label == label;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ label.hashCode;
 }
