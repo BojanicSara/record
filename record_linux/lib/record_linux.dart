@@ -82,10 +82,10 @@ class RecordLinux extends RecordPlatform {
 
   @override
   Future<void> start(
-    String recorderId,
-    RecordConfig config, {
-    required String path,
-  }) async {
+      String recorderId,
+      RecordConfig config, {
+        required String path,
+      }) async {
     await stop(recorderId);
 
     final file = File(path);
@@ -96,6 +96,17 @@ class RecordLinux extends RecordPlatform {
       throw Exception('${config.encoder} is not supported.');
     }
 
+    String numChannels;
+    if (config.numChannels == 6) {
+      numChannels = '5.1';
+    } else if (config.numChannels == 8) {
+      numChannels = '7.1';
+    } else if (config.numChannels == 1 || config.numChannels == 2) {
+      numChannels = config.numChannels.toString();
+    } else {
+      throw Exception('${config.numChannels} config is not supported.');
+    }
+
     await _callFMedia(
       [
         '--notui',
@@ -103,7 +114,7 @@ class RecordLinux extends RecordPlatform {
         '--record',
         '--out=$path',
         '--rate=${config.sampleRate}',
-        '--channels=${config.numChannels}',
+        '--channels=$numChannels',
         '--globcmd=listen',
         '--gain=6.0',
         if (config.device != null) '--dev-capture=${config.device!.id}',
@@ -208,12 +219,12 @@ class RecordLinux extends RecordPlatform {
   }
 
   Future<void> _callFMedia(
-    List<String> arguments, {
-    required String recorderId,
-    StreamController<List<int>>? outStreamCtrl,
-    VoidCallback? onStarted,
-    bool consumeOutput = true,
-  }) async {
+      List<String> arguments, {
+        required String recorderId,
+        StreamController<List<int>>? outStreamCtrl,
+        VoidCallback? onStarted,
+        bool consumeOutput = true,
+      }) async {
     final process = await Process.start(_fmediaBin, [
       '--globcmd.pipe-name=$_pipeProcName/$recorderId',
       ...arguments,
@@ -247,9 +258,9 @@ class RecordLinux extends RecordPlatform {
   // device #1: Microphone (High Definition Audio Device) - Default
   // Default Format: 2 channel, 44100 Hz
   Future<List<InputDevice>> _listInputDevices(
-    String recorderId,
-    List<String> out,
-  ) async {
+      String recorderId,
+      List<String> out,
+      ) async {
     final devices = <InputDevice>[];
     var deviceLine = '';
 
@@ -300,29 +311,29 @@ class RecordLinux extends RecordPlatform {
       label = label.substring(0, index);
     }
 
-    int? channels;
-    int? sampleRate;
-    if (secondLine != null) {
-      final match = RegExp(
-        r'(?:.*Default Format: )(\d+) channel, (\d+) Hz',
-      ).firstMatch(secondLine);
+    // int? channels;
+    // int? sampleRate;
+    // if (secondLine != null) {
+    //   final match = RegExp(
+    //     r'(?:.*Default Format: )(\d+) channel, (\d+) Hz',
+    //   ).firstMatch(secondLine);
 
-      if (match != null && match.groupCount == 2) {
-        // Number of channels
-        final channelsStr = match.group(1);
-        channels = channelsStr != null ? int.tryParse(channelsStr) : null;
+    //   if (match != null && match.groupCount == 2) {
+    //     // Number of channels
+    //     final channelsStr = match.group(1);
+    //     channels = channelsStr != null ? int.tryParse(channelsStr) : null;
 
-        // Sampling rate
-        final samplingStr = match.group(2);
-        sampleRate = samplingStr != null ? int.tryParse(samplingStr) : null;
-      }
-    }
+    //     // Sampling rate
+    //     final samplingStr = match.group(2);
+    //     sampleRate = samplingStr != null ? int.tryParse(samplingStr) : null;
+    //   }
+    // }
 
     return InputDevice(
       id: id,
       label: label,
-      channels: channels,
-      sampleRate: sampleRate,
+      // channels: channels,
+      // sampleRate: sampleRate,
     );
   }
 
