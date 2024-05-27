@@ -6,9 +6,10 @@ import android.media.MediaFormat
 import com.llfbandit.record.record.container.IContainerWriter
 
 class MediaCodecEncoder(
-    mediaFormat: MediaFormat,
-    private val listener: EncoderListener,
-    private val container: IContainerWriter,
+        encoder: String,
+        mediaFormat: MediaFormat,
+        private val listener: EncoderListener,
+        private val container: IContainerWriter,
 ) : IEncoder, MediaCodec.Callback() {
 
     private val codec = createCodec(encoder, mediaFormat)
@@ -22,7 +23,7 @@ class MediaCodecEncoder(
     }
 
     override fun pause() {
-        recordPuased = true
+        recordPaused = true
     }
 
     override fun resume() {
@@ -30,7 +31,7 @@ class MediaCodecEncoder(
     }
 
     override fun stop() {
-        recprdPaused = false
+        recordPaused = false
         recordStopped = true
     }
 
@@ -89,9 +90,9 @@ class MediaCodecEncoder(
     }
 
     override fun onOutputBufferAvailable(
-        codec: MediaCodec,
-        index: Int,
-        info: MediaCodec.BufferInfo
+            codec: MediaCodec,
+            index: Int,
+            info: MediaCodec.BufferInfo
     ) {
         try {
             val byteBuffer = codec.getOutputBuffer(index)

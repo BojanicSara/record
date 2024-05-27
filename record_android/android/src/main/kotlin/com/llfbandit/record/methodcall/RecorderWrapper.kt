@@ -2,7 +2,7 @@ package com.llfbandit.record.methodcall
 
 import android.app.Activity
 import android.content.Context
-import com.llfbandit.record.record.AudioRecorder
+import com.llfbandit.record.record.recorder.AudioRecorder
 import com.llfbandit.record.record.RecordConfig
 import com.llfbandit.record.record.bluetooth.BluetoothScoListener
 import com.llfbandit.record.record.recorder.IRecorder
@@ -141,7 +141,7 @@ internal class RecorderWrapper(
         }
     }
 
-    private fun createRecorder(config: RecordConfig): AudioRecorder {
+    private fun createRecorder(config: RecordConfig): IRecorder {
         if (config.useLegacy) {
             return MediaRecorder(context, recorderStateStreamHandler)
         }
