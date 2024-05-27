@@ -9,7 +9,7 @@ import com.llfbandit.record.record.container.MuxerContainer
 
 class OpusFormat : Format() {
     private val sampleRates = intArrayOf(
-        8000, 12000, 16000, 24000, 48000
+            8000, 12000, 16000, 24000, 48000
     )
 
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_OPUS

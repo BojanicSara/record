@@ -9,7 +9,7 @@ import com.llfbandit.record.record.container.MuxerContainer
 
 class AmrNbFormat : Format() {
     private val bitRates = intArrayOf(
-        4750, 5150, 5900, 6700, 7400, 7950, 10200, 12200
+            4750, 5150, 5900, 6700, 7400, 7950, 10200, 12200
     )
 
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_AMR_NB

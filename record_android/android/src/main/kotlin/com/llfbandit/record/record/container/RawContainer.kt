@@ -56,9 +56,9 @@ class RawContainer(private val path: String?) : IContainerWriter {
     }
 
     override fun writeSampleData(
-        trackIndex: Int,
-        byteBuffer: ByteBuffer,
-        bufferInfo: MediaCodec.BufferInfo
+            trackIndex: Int,
+            byteBuffer: ByteBuffer,
+            bufferInfo: MediaCodec.BufferInfo
     ) {
         if (!isStarted) {
             throw IllegalStateException("Container not started")
@@ -74,9 +74,9 @@ class RawContainer(private val path: String?) : IContainerWriter {
     }
 
     override fun writeStream(
-        trackIndex: Int,
-        byteBuffer: ByteBuffer,
-        bufferInfo: MediaCodec.BufferInfo
+            trackIndex: Int,
+            byteBuffer: ByteBuffer,
+            bufferInfo: MediaCodec.BufferInfo
     ): ByteArray {
         val buffer = ByteArray(bufferInfo.size)
         byteBuffer[buffer, bufferInfo.offset, bufferInfo.size]

@@ -23,8 +23,8 @@ class MuxerContainer(path: String, containerFormat: Int) : IContainerWriter {
     override fun addTrack(mediaFormat: MediaFormat): Int = muxer.addTrack(mediaFormat)
 
     override fun writeSampleData(
-        trackIndex: Int,
-        byteBuffer: ByteBuffer,
-        bufferInfo: MediaCodec.BufferInfo
+            trackIndex: Int,
+            byteBuffer: ByteBuffer,
+            bufferInfo: MediaCodec.BufferInfo
     ) = muxer.writeSampleData(trackIndex, byteBuffer, bufferInfo)
 }

@@ -2,7 +2,6 @@ package com.llfbandit.record.record.encoder
 
 import android.media.MediaCodec
 import android.media.MediaCodec.CodecException
-import android.media.MediaCodecList
 import android.media.MediaFormat
 import com.llfbandit.record.record.container.IContainerWriter
 
@@ -12,44 +11,49 @@ class MediaCodecEncoder(
     private val container: IContainerWriter,
 ) : IEncoder, MediaCodec.Callback() {
 
-    private val codec = createCodec(mediaFormat)
+    private val codec = createCodec(encoder, mediaFormat)
     private var trackIndex = -1
-    private var recordStopped: Boolean = false
+    private var recordStopped = false
+    private var recordPaused = false
 
     override fun start() {
         codec.setCallback(this)
         codec.start()
     }
 
+    override fun pause() {
+        recordPuased = true
+    }
+
+    override fun resume() {
+        recordPaused = false
+    }
+
     override fun stop() {
+        recprdPaused = false
         recordStopped = true
     }
 
-    override fun release() {
-        codec.release()
-        container.release()
-    }
+    override fun release() {}
 
-    private fun createCodec(mediaFormat: MediaFormat): MediaCodec {
-        val encoder =
-            MediaCodecList(MediaCodecList.REGULAR_CODECS).findEncoderForFormat(mediaFormat)
-                ?: throw Exception("No encoder found for $mediaFormat")
-
-        val codec = MediaCodec.createByCodecName(encoder)
-
+    private fun createCodec(encoder: String, mediaFormat: MediaFormat): MediaCodec {
+        var mediaCodec: MediaCodec? = null
         try {
-            codec.configure(mediaFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE)
+            mediaCodec = MediaCodec.createByCodecName(encoder)
+            mediaCodec.configure(mediaFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE)
+            return mediaCodec
         } catch (e: Exception) {
-            codec.release()
+            mediaCodec?.release()
             throw e
         }
-
-        return codec
     }
 
     private fun internalStop() {
         codec.stop()
+        codec.release()
         container.stop()
+        container.release()
+
         listener.onEncoderStop()
     }
 
@@ -67,6 +71,11 @@ class MediaCodecEncoder(
     }
 
     override fun onInputBufferAvailable(codec: MediaCodec, index: Int) {
+        if (recordPaused) {
+            codec.queueInputBuffer(index, 0, 0, 0, 0)
+            return
+        }
+
         try {
             val byteBuffer = codec.getInputBuffer(index) ?: return
             val resultBytes = listener.onEncoderDataNeeded(byteBuffer)

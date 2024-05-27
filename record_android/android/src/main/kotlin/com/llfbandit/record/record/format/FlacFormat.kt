@@ -7,7 +7,7 @@ import com.llfbandit.record.record.container.IContainerWriter
 
 class FlacFormat : Format() {
     private val sampleRates = intArrayOf(
-        8000, 11025, 22050, 44100, 48000
+            8000, 11025, 22050, 44100, 48000
     )
 
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_FLAC

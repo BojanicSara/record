@@ -5,23 +5,23 @@ import android.media.MediaFormat
 import java.nio.ByteBuffer
 
 class AdtsContainer(
-    private val sampleRate: Int,
-    private val numChannels: Int,
-    private val aacProfile: Int
+        private val sampleRate: Int,
+        private val numChannels: Int,
+        private val aacProfile: Int
 ) : IContainerWriter {
     private val sampleRates = intArrayOf(
-        96000,
-        88200,
-        64000,
-        48000,
-        44100,
-        32000,
-        24000,
-        22050,
-        16000,
-        12000,
-        11025,
-        8000
+            96000,
+            88200,
+            64000,
+            48000,
+            44100,
+            32000,
+            24000,
+            22050,
+            16000,
+            12000,
+            11025,
+            8000
     )
 
     private var isStarted = false
@@ -64,9 +64,9 @@ class AdtsContainer(
     }
 
     override fun writeSampleData(
-        trackIndex: Int,
-        byteBuffer: ByteBuffer,
-        bufferInfo: MediaCodec.BufferInfo
+            trackIndex: Int,
+            byteBuffer: ByteBuffer,
+            bufferInfo: MediaCodec.BufferInfo
     ) {
         if (!isStarted) {
             throw IllegalStateException("Container not started")
@@ -78,9 +78,9 @@ class AdtsContainer(
     }
 
     override fun writeStream(
-        trackIndex: Int,
-        byteBuffer: ByteBuffer,
-        bufferInfo: MediaCodec.BufferInfo
+            trackIndex: Int,
+            byteBuffer: ByteBuffer,
+            bufferInfo: MediaCodec.BufferInfo
     ): ByteArray {
         // Add header
         var bytes = addADTSFrame(bufferInfo.size)

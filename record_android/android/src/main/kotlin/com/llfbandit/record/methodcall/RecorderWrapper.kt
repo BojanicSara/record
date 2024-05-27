@@ -1,21 +1,33 @@
 package com.llfbandit.record.methodcall
 
 import android.app.Activity
+import android.content.Context
 import com.llfbandit.record.record.AudioRecorder
 import com.llfbandit.record.record.RecordConfig
+import com.llfbandit.record.record.bluetooth.BluetoothScoListener
+import com.llfbandit.record.record.recorder.IRecorder
+import com.llfbandit.record.record.recorder.MediaRecorder
 import com.llfbandit.record.record.stream.RecorderRecordStreamHandler
 import com.llfbandit.record.record.stream.RecorderStateStreamHandler
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 
-internal class RecorderWrapper(recorderId: String, messenger: BinaryMessenger) {
+internal class RecorderWrapper(
+        private val context: Context,
+        recorderId: String,
+        messenger: BinaryMessenger
+): BluetoothScoListener {
+    companion object {
+        const val EVENTS_STATE_CHANNEL = "com.llfbandit.record/events/"
+        const val EVENTS_RECORD_CHANNEL = "com.llfbandit.record/eventsRecord/"
+    }
+
     private var eventChannel: EventChannel?
     private val recorderStateStreamHandler = RecorderStateStreamHandler()
     private var eventRecordChannel: EventChannel?
     private val recorderRecordStreamHandler = RecorderRecordStreamHandler()
-    private var recorder: AudioRecorder? = null
-    private var config: RecordConfig? = null
+    private var recorder: IRecorder? = null
 
     init {
         eventChannel = EventChannel(messenger, EVENTS_STATE_CHANNEL + recorderId)
@@ -34,6 +46,9 @@ internal class RecorderWrapper(recorderId: String, messenger: BinaryMessenger) {
     }
 
     fun startRecordingToStream(config: RecordConfig, result: MethodChannel.Result) {
+        if (config.useLegacy) {
+            throw Exception("Unsupported feature from legacy recorder.")
+        }
         startRecording(config, result)
     }
 
@@ -92,8 +107,11 @@ internal class RecorderWrapper(recorderId: String, messenger: BinaryMessenger) {
 
     fun stop(result: MethodChannel.Result) {
         try {
-            recorder?.stop()
-            result.success(config?.path)
+            if (recorder == null) {
+                result.success(null)
+            } else {
+                recorder?.stop(fun(path) = result.success(path))
+            }
         } catch (e: Exception) {
             result.error("record", e.message, e.cause)
         }
@@ -109,31 +127,43 @@ internal class RecorderWrapper(recorderId: String, messenger: BinaryMessenger) {
     }
 
     private fun startRecording(config: RecordConfig, result: MethodChannel.Result) {
-        this.config = config
-
         try {
             if (recorder == null) {
                 recorder = createRecorder(config)
+                start(config, result)
             } else if (recorder!!.isRecording) {
-                recorder!!.stop()
+                recorder!!.stop(fun(_) = start(config, result))
+            } else {
+                start(config, result)
             }
-            recorder!!.start()
-            result.success(null)
         } catch (e: Exception) {
             result.error("record", e.message, e.cause)
         }
     }
 
     private fun createRecorder(config: RecordConfig): AudioRecorder {
+        if (config.useLegacy) {
+            return MediaRecorder(context, recorderStateStreamHandler)
+        }
+
         return AudioRecorder(
-            config,
-            recorderStateStreamHandler,
-            recorderRecordStreamHandler
+                recorderStateStreamHandler,
+                recorderRecordStreamHandler,
+                context
         )
     }
 
-    companion object {
-        const val EVENTS_STATE_CHANNEL = "com.llfbandit.record/events/"
-        const val EVENTS_RECORD_CHANNEL = "com.llfbandit.record/eventsRecord/"
+    private fun start(config: RecordConfig, result: MethodChannel.Result) {
+        recorder!!.start(config)
+        result.success(null)
+    }
+
+    ///////////////////////////////////////////////////////////
+    // BluetoothScoListener
+    ///////////////////////////////////////////////////////////
+    override fun onBlScoConnected() {
+    }
+
+    override fun onBlScoDisconnected() {
     }
 }

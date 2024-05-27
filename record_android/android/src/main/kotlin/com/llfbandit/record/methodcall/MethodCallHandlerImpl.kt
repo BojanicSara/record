@@ -1,9 +1,13 @@
 package com.llfbandit.record.methodcall
 
 import android.app.Activity
+import android.content.Context
+import android.os.Build
 import com.llfbandit.record.Utils
 import com.llfbandit.record.permission.PermissionManager
 import com.llfbandit.record.record.RecordConfig
+import com.llfbandit.record.record.bluetooth.BluetoothReceiver
+import com.llfbandit.record.record.device.DeviceUtils
 import com.llfbandit.record.record.format.AudioFormats
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
@@ -15,14 +19,18 @@ import java.util.concurrent.ConcurrentHashMap
 
 class MethodCallHandlerImpl(
     private val permissionManager: PermissionManager,
-    private val messenger: BinaryMessenger
+    private val messenger: BinaryMessenger,
+    private val appContext: Context
 ) : MethodCallHandler {
     private var activity: Activity? = null
     private val recorders = ConcurrentHashMap<String, RecorderWrapper>()
+    private val bluetoothReceiver = BluetoothReceiver(appContext)
+
     fun dispose() {
-        for (recorder in recorders.values) {
-            recorder.dispose()
+        for (entry in recorders.entries) {
+            disposeRecorder(entry.value, entry.key)
         }
+
         recorders.clear()
     }
 
@@ -83,10 +91,10 @@ class MethodCallHandlerImpl(
             "cancel" -> recorder.cancel(result)
             "hasPermission" -> permissionManager.hasPermission(result::success)
             "getAmplitude" -> recorder.getAmplitude(result)
-            "listInputDevices" -> result.success(null)
+            "listInputDevices" -> result.success(DeviceUtils.listInputDevicesAsMap(appContext))
+
             "dispose" -> {
-                recorder.dispose()
-                recorders.remove(recorderId)
+                disposeRecorder(recorder, recorderId)
                 result.success(null)
             }
 
@@ -103,23 +111,45 @@ class MethodCallHandlerImpl(
     }
 
     private fun createRecorder(recorderId: String) {
-        val recorder = RecorderWrapper(recorderId, messenger)
+        val recorder = RecorderWrapper(appContext, recorderId, messenger)
         recorder.setActivity(activity)
         recorders[recorderId] = recorder
+
+        if (!bluetoothReceiver.hasListeners()) {
+            bluetoothReceiver.register()
+        }
+        bluetoothReceiver.addListener(recorder)
     }
 
-    @Throws(IOException::class)
+    private fun disposeRecorder(recorder: RecorderWrapper, recorderId: String) {
+        recorder.dispose()
+        recorders.remove(recorderId)
+
+        bluetoothReceiver.removeListener(recorder)
+        if (!bluetoothReceiver.hasListeners()) {
+            bluetoothReceiver.unregister()
+        }
+    }
+
     private fun getRecordConfig(call: MethodCall): RecordConfig {
+        val androidConfig = call.argument("androidConfig") as Map<*, *>?
+
         return RecordConfig(
-            call.argument("path"),
-            Utils.firstNonNull(call.argument("encoder"), "aacLc"),
-            Utils.firstNonNull(call.argument("bitRate"), 128000),
-            Utils.firstNonNull(call.argument("sampleRate"), 44100),
-            Utils.firstNonNull(call.argument("numChannels"), 2),
-            //call.argument("device"),
-            Utils.firstNonNull(call.argument("autoGain"), false),
-            Utils.firstNonNull(call.argument("echoCancel"), false),
-            Utils.firstNonNull(call.argument("noiseSuppress"), false)
+                call.argument("path"),
+                Utils.firstNonNull(call.argument("encoder"), "aacLc"),
+                Utils.firstNonNull(call.argument("bitRate"), 128000),
+                Utils.firstNonNull(call.argument("sampleRate"), 44100),
+                Utils.firstNonNull(call.argument("numChannels"), 2),
+                if (Build.VERSION.SDK_INT >= 23) {
+                    DeviceUtils.deviceInfoFromMap(appContext, call.argument("device"))
+                } else {
+                    null
+                },
+                Utils.firstNonNull(call.argument("autoGain"), false),
+                Utils.firstNonNull(call.argument("echoCancel"), false),
+                Utils.firstNonNull(call.argument("noiseSuppress"), false),
+                Utils.firstNonNull(androidConfig?.get("useLegacy") as Boolean?, false),
+                Utils.firstNonNull(androidConfig?.get("muteAudio") as Boolean?, false),
         )
     }
 }

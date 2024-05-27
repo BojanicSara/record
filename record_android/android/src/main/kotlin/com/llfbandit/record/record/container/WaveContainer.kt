@@ -67,9 +67,9 @@ class WaveContainer(path: String, private val frameSize: Int) : IContainerWriter
     }
 
     override fun writeSampleData(
-        trackIndex: Int,
-        byteBuffer: ByteBuffer,
-        bufferInfo: MediaCodec.BufferInfo
+            trackIndex: Int,
+            byteBuffer: ByteBuffer,
+            bufferInfo: MediaCodec.BufferInfo
     ) {
         if (!isStarted) {
             throw IllegalStateException("Container not started")

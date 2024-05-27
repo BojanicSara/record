@@ -68,9 +68,9 @@ interface IContainerWriter {
      * @param trackIndex Must be an index returned by [addTrack]
      */
     fun writeStream(
-        trackIndex: Int,
-        byteBuffer: ByteBuffer,
-        bufferInfo: MediaCodec.BufferInfo
+            trackIndex: Int,
+            byteBuffer: ByteBuffer,
+            bufferInfo: MediaCodec.BufferInfo
     ): ByteArray {
         throw NotImplementedError()
     }

@@ -56,9 +56,9 @@ class FlacContainer(path: String) : IContainerWriter {
     }
 
     override fun writeSampleData(
-        trackIndex: Int,
-        byteBuffer: ByteBuffer,
-        bufferInfo: MediaCodec.BufferInfo
+            trackIndex: Int,
+            byteBuffer: ByteBuffer,
+            bufferInfo: MediaCodec.BufferInfo
     ) {
         if (!isStarted) {
             throw IllegalStateException("Container not started")
@@ -95,7 +95,7 @@ class FlacContainer(path: String) : IContainerWriter {
 
         // Validate the magic
         if (ByteBuffer.wrap(buf.asByteArray(), 0, 4) !=
-            ByteBuffer.wrap(FLAC_MAGIC.asByteArray())
+                ByteBuffer.wrap(FLAC_MAGIC.asByteArray())
         ) {
             throw IOException("FLAC magic not found")
         }
@@ -106,8 +106,8 @@ class FlacContainer(path: String) : IContainerWriter {
         }
 
         val streamInfoSize = buf[5].toUInt().shl(16) or
-                    buf[6].toUInt().shl(8) or
-                    buf[7].toUInt()
+                buf[6].toUInt().shl(8) or
+                buf[7].toUInt()
         if (streamInfoSize < 34u) {
             throw IOException("STREAMINFO block is too small")
         }

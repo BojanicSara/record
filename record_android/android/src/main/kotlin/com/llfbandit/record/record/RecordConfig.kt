@@ -1,21 +1,21 @@
 package com.llfbandit.record.record
 
+import android.media.AudioDeviceInfo
+
 class RecordConfig(
     val path: String?,
     val encoder: String,
     val bitRate: Int,
     val sampleRate: Int,
     numChannels: Int,
-    //val device: Map<String, Any>?,
+    val device: AudioDeviceInfo?,
     val autoGain: Boolean = false,
     val echoCancel: Boolean = false,
-    val noiseSuppress: Boolean = false
+    val noiseSuppress: Boolean = false,
+    val useLegacy: Boolean = false,
+    val muteAudio: Boolean = false
 ) {
-    val numChannels: Int
-
-    init {
-        this.numChannels = 2.coerceAtMost(1.coerceAtLeast(numChannels))
-    }
+    val numChannels: Int = 2.coerceAtMost(1.coerceAtLeast(numChannels))
 }
 
 class AudioEncoder {
