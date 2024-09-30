@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  uuid: ^3.0.0
+  uuid: ^4.0.0
 
 #dependency_overrides:
   record_platform_interface:
